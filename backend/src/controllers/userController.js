@@ -28,7 +28,9 @@ export const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll()
 
-        res.status(200).json(users)
+        const usersToResponse = users.map((user)=>{return {id: user.id, email: user.email, name: user.name}})
+
+        res.status(200).json(usersToResponse)
     } catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente."})
     }
@@ -39,7 +41,7 @@ export const getUser = async (req, res) => {
         const user = await User.findOne({
             where: {email: req.params.email}
         })
-        
+
         res.status(200).json({
             id: user.id,
             email: user.email,
