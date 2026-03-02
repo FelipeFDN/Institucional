@@ -39,6 +39,7 @@ export const getUser = async (req, res) => {
         const user = await User.findOne({
             where: {email: req.params.email}
         })
+        
         res.status(200).json({
             id: user.id,
             email: user.email,
