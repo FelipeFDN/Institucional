@@ -44,7 +44,7 @@ export const updateProduct = async (req, res) => {
             { where: {id: req.params.id} }
         )
 
-        res.status(200).json(product)
+        res.status(200).json({ message: "Produto atualizado com sucesso." })
     }catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente."})
     }
