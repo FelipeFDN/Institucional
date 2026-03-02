@@ -1,6 +1,8 @@
 import Product from '../models/Product.js'
 import crypto from 'node:crypto'
 
+import { deleteImageFile } from './imageController.js'
+
 export const createProduct = async (req, res) => {
     try{
         const result = await Product.create({
@@ -13,7 +15,7 @@ export const createProduct = async (req, res) => {
 
         res.status(201).json(result)
     }catch (err) {
-        res.status(500).json({ message: "Erro no servidor, tente novamente." + err})
+        res.status(500).json({ message: "Erro no servidor, tente novamente."})
     }
 }
 
@@ -52,6 +54,11 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try{
+
+        const image = await Product.findByPk(req.params.id)
+        const filename = image.image_url.replace('/uploads/', '')
+        deleteImageFile(filename)    
+
         const deleted = await Product.destroy({
             where: { id: req.params.id }
         })

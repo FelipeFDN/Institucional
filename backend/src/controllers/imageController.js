@@ -38,6 +38,13 @@ export const getAllImages = (req, res) => {
     }
 }
 
+export const deleteImageFile = (filename) => {
+    const filePath = path.join(uploadsDir, filename)
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+    }
+}
+
 export const deleteImage = (req, res) => {
     try {
         const { filename } = req.params

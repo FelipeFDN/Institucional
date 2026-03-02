@@ -3,7 +3,7 @@ import Sequelize, { Model } from 'sequelize'
 class News extends Model {
     static init(sequelize){
         super.init({
-            name: {
+            tittle: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
