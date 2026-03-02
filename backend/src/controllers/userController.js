@@ -28,7 +28,7 @@ export const getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll()
 
-        const usersToResponse = users.map((user)=>{return {id: user.id, email: user.email, name: user.name}})
+        const usersToResponse = users.map((user)=>{return {id: user.id, email: user.email, name: user.name, deleted: user.deleted}})
 
         res.status(200).json(usersToResponse)
     } catch (err) {
@@ -55,9 +55,10 @@ export const getUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
-        const user = await User.destroy({
-            where: {id: req.params.id}
-        })
+        const user = await User.update(
+            { deleted:true, deleted_by: req.user_id },
+            { where: {id: req.params.id}}
+        )
         res.status(200).json(user)
     } catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente."})

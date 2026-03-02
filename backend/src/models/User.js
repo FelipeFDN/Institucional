@@ -15,8 +15,20 @@ class User extends Model {
             password: {
                 type: Sequelize.STRING,
                 allowNull: false
+            },
+            deleted: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
+            },
+            deleted_by: {
+                type: Sequelize.UUID,
+                allowNull: true
             }
         }, {sequelize})
+    }
+    static associate(models) {
+        this.belongsTo(models.User, { foreignKey: 'deleted_by', as: 'deleted' })
     }
 }
 
