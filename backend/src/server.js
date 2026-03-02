@@ -11,9 +11,11 @@ import authToken from './middlewares/authToken.js'
 import userRoutes from './routes/userRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import imageRoutes from './routes/imageRoutes.js'
+import productRoutes from './routes/productRoutes.js'
 
 //Models
 import User from './models/User.js'
+import Product from './models/Product.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,9 +33,11 @@ app.use(authToken)
 
 app.use('/usuarios', userRoutes)
 app.use('/imagens', imageRoutes)
+app.use('/produtos', productRoutes)
 
 const sequelize = new Sequelize(config)
 User.init(sequelize)
+Product.init(sequelize)
 
 sequelize.authenticate().then(() => {
     app.listen(3000, () => {
