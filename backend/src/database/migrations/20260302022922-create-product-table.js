@@ -3,8 +3,8 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-
-      await queryInterface.createTable('users', { 
+    
+    await queryInterface.createTable('product', { 
         id: {
           type: Sequelize.UUID,
           allowNull: false,
@@ -15,14 +15,21 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false
         },
-        email: {
+        description: {
           type: Sequelize.STRING,
-          allowNull: false,
-          unique: true
+          allowNull: true
         },
-        password: {
+        image_url: {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
+        },
+        created_by: {
+          type: Sequelize.UUID,
+          allowNull: true,
+          references: {
+            model: 'users',
+            key: 'id'
+          }
         },
         created_at: {
           type: Sequelize.DATE,
@@ -31,25 +38,12 @@ module.exports = {
         updated_at: {
           type: Sequelize.DATE,
           allowNull: false
-        },
-        deleted: {
-          type: Sequelize.BOOL,
-          allowNull: false,
-          defaultValue: false
-        },
-        deleted_by: {
-          type: Sequelize.UUID,
-          allowNull: true,
-          references: {
-            model: 'users',
-            key: 'id'
-          }
         }
       });
 
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.dropTable('users');
+    await queryInterface.dropTable('product');
   }
 };
