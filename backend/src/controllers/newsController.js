@@ -3,9 +3,6 @@ import NewsImage from '../models/NewsImage.js'
 import crypto from 'node:crypto'
 import { deleteImageFile } from './imageController.js'
 
-//import { createNews, getAllNews, getNews, updateNews, deleteNews, addImages } from '../controllers/authController.js'
-
-
 export const createNews = async (req, res) => {
     try{
         const result = await News.create({
@@ -83,5 +80,27 @@ export const deleteNews = async (req, res) => {
         }
     }catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente."})
+    }
+}
+
+export const addImages = async (req, res) => {
+    try {
+        const news = await News.findByPk(req.params.id)
+
+        if (!news) {
+            return res.status(404).json({ message: "Notícia não encontrada." })
+        }
+
+        const images = req.files.map(file => ({
+            id: crypto.randomUUID(),
+            news_id: news.id,
+            image_url: file.path
+        }))
+
+        await NewsImage.bulkCreate(images)
+
+        res.status(201).json({ message: "Imagens adicionadas com sucesso." })
+    } catch (err) {
+        res.status(500).json({ message: "Erro no servidor, tente novamente." })
     }
 }

@@ -2,7 +2,7 @@ import express from 'express'
 import multer from 'multer'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { uploadImage, getAllImages, deleteImage } from '../controllers/imageController.js'
+import { uploadImage, getAllImages, deleteImage } from '../../controllers/imageController.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
