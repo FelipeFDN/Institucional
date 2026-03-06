@@ -3,6 +3,8 @@ import Sequelize from 'sequelize'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import cors from 'cors'
+
 import config from './config/database.js'
 
 import authToken from './middlewares/authToken.js'
@@ -28,21 +30,39 @@ const __dirname = path.dirname(__filename)
 const app = express()
 app.use(express.json())
 
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((o) => o.trim())
+  : ['http://localhost:5173', 'http://localhost:80', 'http://localhost']
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Permite chamadas sem origin (ex: Postman, curl, servidor para servidor)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.includes(origin)) return callback(null, true)
+      callback(new Error(`CORS: origem não permitida → ${origin}`))
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+)
+
+
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 //Rotas públicas
-app.use('/auth', authRoutes)
-app.use('/produtos', productRoutes)
-app.use('/noticias', newsRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/produtos', productRoutes)
+app.use('/api/noticias', newsRoutes)
 
 //middleware
 app.use(authToken)
 
 //Rotas privadas
-app.use('/usuarios', userPrivateRoutes)
-app.use('/imagens', imagePrivateRoutes)
-app.use('/produtos', productPrivateRoutes)
-app.use('/noticias', newsPrivateRoutes)
+app.use('/api/usuarios', userPrivateRoutes)
+app.use('/api/imagens', imagePrivateRoutes)
+app.use('/api/produtosP', productPrivateRoutes)
+app.use('/api/noticiasP', newsPrivateRoutes)
 
 const sequelize = new Sequelize(config)
 User.init(sequelize)

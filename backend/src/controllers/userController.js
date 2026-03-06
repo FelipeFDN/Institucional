@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.findAll()
+        const users = await User.findAll({where: {deleted: false}})
 
         const usersToResponse = users.map((user)=>{return {id: user.id, email: user.email, name: user.name, deleted: user.deleted}})
 
