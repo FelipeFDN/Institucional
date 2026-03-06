@@ -1,0 +1,191 @@
+/* Estilos compartilhados para as páginas Admin */
+.title {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader .title {
+  margin-bottom: 0;
+}
+
+.btnNew {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: background var(--transition);
+}
+
+.btnNew:hover {
+  background-color: var(--primary);
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.form h2 {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.fields {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.fields input,
+.fields textarea,
+.fields select {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.fields input:focus,
+.fields textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.formActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btnSave {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: background var(--transition);
+}
+
+.btnSave:hover:not(:disabled) {
+  background-color: var(--primary);
+}
+
+.btnSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnCancel {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.btnCancel:hover {
+  background: #f0f0f0;
+}
+
+.msg {
+  font-size: 0.9rem;
+  color: var(--success);
+  margin-bottom: 0.75rem;
+}
+
+.error {
+  color: var(--danger);
+  padding: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.table th, .table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  background-color: var(--secondary);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: #f9f9f9;
+}
+
+.thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnEdit {
+  background-color: var(--warning);
+  color: #333;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  transition: opacity var(--transition);
+}
+
+.btnEdit:hover {
+  opacity: 0.85;
+}
+
+.btnDelete {
+  background-color: var(--danger);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  transition: opacity var(--transition);
+}
+
+.btnDelete:hover {
+  opacity: 0.85;
+}
+

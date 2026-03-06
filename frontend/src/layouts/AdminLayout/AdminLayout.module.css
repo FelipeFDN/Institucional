@@ -1,0 +1,91 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: var(--primary);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebarHeader {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--highlight);
+  margin-bottom: 2rem;
+  padding-left: 0.5rem;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.sidebarNav a {
+  color: var(--text-muted);
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  transition: background var(--transition), color var(--transition);
+}
+
+.sidebarNav a:hover {
+  background-color: var(--secondary);
+  color: var(--text);
+}
+
+.sidebarNav a.active {
+  background-color: var(--highlight);
+  color: var(--white);
+}
+
+.logoutBtn {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  text-align: left;
+  transition: color var(--transition);
+  width: 100%;
+}
+
+.logoutBtn:hover {
+  color: var(--highlight);
+}
+
+.sidebarFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.backBtn {
+  display: block;
+  color: var(--text-muted);
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  transition: background var(--transition), color var(--transition);
+}
+
+.backBtn:hover {
+  background-color: var(--secondary);
+  color: var(--text);
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  background-color: var(--bg);
+  overflow-y: auto;
+}

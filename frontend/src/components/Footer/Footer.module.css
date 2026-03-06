@@ -1,0 +1,95 @@
+.footer {
+  background-color: var(--primary);
+  color: var(--text);
+  margin-top: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.info h3 {
+  font-size: 1.4rem;
+  color: var(--highlight);
+  margin-bottom: 0.5rem;
+}
+
+.contact h4, .social h4 {
+  color: var(--highlight);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.admin h4 {
+  color: var(--highlight);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.admin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.btnAdmin {
+  display: inline-block;
+  background-color: var(--highlight);
+  color: var(--white);
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  transition: background var(--transition);
+}
+
+.btnAdmin:hover {
+  background-color: #c73652;
+}
+
+.btnLogout {
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+  transition: color var(--transition);
+}
+
+.btnLogout:hover {
+  color: var(--highlight);
+}
+
+.contact p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.socialLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.socialLinks a {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  transition: color var(--transition);
+}
+
+.socialLinks a:hover {
+  color: var(--highlight);
+}
+
+.bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
