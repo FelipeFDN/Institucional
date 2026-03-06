@@ -6,6 +6,11 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# Recebe a URL da API em tempo de build (Vite embute no bundle)
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 RUN npm run build
 
 FROM nginx:alpine
