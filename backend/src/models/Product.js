@@ -15,6 +15,10 @@ class Product extends Model {
                 type: Sequelize.STRING,
                 allowNull: true
             },
+            class: {
+                type: Sequelize.UUID,
+                allowNull: true,
+            },
             created_by: {
                 type: Sequelize.UUID,
                 allowNull: true
@@ -23,6 +27,7 @@ class Product extends Model {
     }
     static associate(models) {
         this.belongsTo(models.User, { foreignKey: 'created_by', as: 'creator' })
+        this.belongsTo(models.ProductClasses, { foreignKey: 'class', as: 'class' })        
     }
 }
 
