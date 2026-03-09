@@ -59,12 +59,15 @@ export default function NewsDetail() {
 
           {/* Imagens adicionais */}
           {extraImages.length > 0 && (
-            <div className={styles.gallery}>
-              {extraImages.map((img) => (
-                <div key={img.id} className={styles.galleryItem}>
-                  <img src={`${apiUrl}${img.image_url}`} alt="" />
-                </div>
-              ))}
+            <div className={styles.gallerySection}>
+              <h2 className={styles.galleryTitle}>Galeria de imagens</h2>
+              <div className={styles.gallery}>
+                {extraImages.map((img) => (
+                  <div key={img.id} className={styles.galleryItem}>
+                    <img src={`${apiUrl}${img.image_url}`} alt="" />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </article>

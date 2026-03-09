@@ -12,8 +12,8 @@ export default function AdminNews() {
   const { data: news, loading, error, refetch } = useFetch(newsService.getAll)
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
-  const [editImages, setEditImages] = useState([])   // NewsImages jÃ¡ salvas
-  const [newImages, setNewImages] = useState([])      // arquivos a enviar
+  const [editImages, setEditImages] = useState([])
+  const [newImages, setNewImages] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -41,7 +41,6 @@ export default function AdminNews() {
     setEditImages([])
     setNewImages([])
     setMsg(null)
-    // Busca imagens jÃ¡ associadas
     newsService.getById(item.id).then(({ data }) => {
       setEditImages(data.images || [])
     })
@@ -83,20 +82,19 @@ export default function AdminNews() {
         savedId = data.id
       }
 
-      // Envia imagens extras se houver
       if (newImages.length > 0) {
         setUploading(true)
         await newsService.addImages(savedId, newImages)
         setUploading(false)
       }
 
-      setMsg(editId ? 'NotÃ­cia atualizada com sucesso.' : 'NotÃ­cia criada com sucesso.')
+      setMsg(editId ? 'Notícia atualizada com sucesso.' : 'Notícia criada com sucesso.')
       setForm(emptyForm)
       setEditId(null)
       setNewImages([])
       refetch()
     } catch (err) {
-      setMsg(err.response?.data?.message || 'Erro ao salvar notÃ­cia.')
+      setMsg(err.response?.data?.message || 'Erro ao salvar notícia.')
     } finally {
       setSubmitting(false)
       setUploading(false)
@@ -114,36 +112,36 @@ export default function AdminNews() {
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Deseja deletar esta notÃ­cia?')) return
+    if (!confirm('Deseja deletar esta notícia?')) return
     try {
       await newsService.delete(id)
       refetch()
     } catch {
-      alert('Erro ao deletar notÃ­cia.')
+      alert('Erro ao deletar notícia.')
     }
   }
 
   return (
     <div>
       <div className={styles.pageHeader}>
-        <h1 className={styles.title}>Gerenciar NotÃ­cias</h1>
-        <button className={styles.btnNew} onClick={openCreate}>+ Nova NotÃ­cia</button>
+        <h1 className={styles.title}>Gerenciar Notícias</h1>
+        <button className={styles.btnNew} onClick={openCreate}>+ Nova Notícia</button>
       </div>
 
       {loading ? <Loading /> : error ? <p className={styles.error}>{error}</p> : (
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>TÃ­tulo</th>
-              <th>DescriÃ§Ã£o</th>
-              <th>AÃ§Ãµes</th>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {news.map((item) => (
               <tr key={item.id}>
                 <td>{item.tittle}</td>
-                <td>{item.description || 'â€”'}</td>
+                <td>{item.description || '—'}</td>
                 <td className={styles.actions}>
                   <button className={styles.btnEdit} onClick={() => openEdit(item)}>Editar</button>
                   <button className={styles.btnDelete} onClick={() => handleDelete(item.id)}>Deletar</button>
@@ -157,13 +155,13 @@ export default function AdminNews() {
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}
-        title={editId ? 'Editar NotÃ­cia' : 'Nova NotÃ­cia'}
+        title={editId ? 'Editar Notícia' : 'Nova Notícia'}
       >
         <form onSubmit={handleSubmit} className={styles.modalForm}>
           <div className={styles.fields}>
-            <input name="tittle" value={form.tittle} onChange={handleChange} placeholder="TÃ­tulo" required />
-            <textarea name="description" value={form.description} onChange={handleChange} placeholder="DescriÃ§Ã£o curta (subtÃ­tulo)" rows={3} />
-            <textarea name="body" value={form.body} onChange={handleChange} placeholder="Texto completo da notÃ­cia" rows={8} />
+            <input name="tittle" value={form.tittle} onChange={handleChange} placeholder="Título" required />
+            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Descrição curta (subtítulo)" rows={3} />
+            <textarea name="body" value={form.body} onChange={handleChange} placeholder="Texto completo da notícia" rows={8} />
 
             <label className={styles.fieldLabel}>Banner (imagem principal)</label>
             <input type="file" name="image" accept="image/*" onChange={handleChange} />
@@ -180,7 +178,6 @@ export default function AdminNews() {
             )}
           </div>
 
-          {/* Imagens jÃ¡ salvas (sÃ³ no modo ediÃ§Ã£o) */}
           {editId && editImages.length > 0 && (
             <div className={styles.imageGrid}>
               {editImages.map((img) => (
@@ -190,7 +187,7 @@ export default function AdminNews() {
                     type="button"
                     className={styles.removeImageBtn}
                     onClick={() => handleDeleteImage(img.id)}
-                  >âœ•</button>
+                  >x</button>
                 </div>
               ))}
             </div>

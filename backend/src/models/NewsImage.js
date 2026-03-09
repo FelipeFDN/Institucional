@@ -3,6 +3,11 @@ import Sequelize, { Model } from 'sequelize'
 class NewsImage extends Model {
     static init(sequelize){
         super.init({
+            id: {
+                type: Sequelize.UUID,
+                primaryKey: true,
+                allowNull: false
+            },
             news_id: {
                 type: Sequelize.UUID,
                 allowNull: true
