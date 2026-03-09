@@ -1,4 +1,5 @@
 import Product from '../models/Product.js'
+import ProductClasses from '../models/ProductClasses.js'
 import crypto from 'node:crypto'
 
 import { deleteImageFile } from './imageController.js'
@@ -21,7 +22,9 @@ export const createProduct = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try{
-        const products = await Product.findAll()
+        const products = await Product.findAll({
+            include: [{ model: ProductClasses, as: 'classId', attributes: ['id', 'tittle'] }]
+        })
 
         res.status(200).json(products)
     }catch (err) {
@@ -31,7 +34,9 @@ export const getAllProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
     try{
-        const product = await Product.findByPk(req.params.id)
+        const product = await Product.findByPk(req.params.id, {
+            include: [{ model: ProductClasses, as: 'classId', attributes: ['id', 'tittle'] }]
+        })
 
         res.status(200).json(product)
     }catch (err) {

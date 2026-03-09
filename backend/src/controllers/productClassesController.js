@@ -19,7 +19,9 @@ export const createProductClass = async (req, res) => {
 
 export const getAllProductClasses = async (req, res) => {
     try{
-        const classes = await ProductClasses.findAll()
+        const classes = await ProductClasses.findAll({
+            where: { deleted: false }
+        })
 
         res.status(200).json(classes)
     }catch (err) {
