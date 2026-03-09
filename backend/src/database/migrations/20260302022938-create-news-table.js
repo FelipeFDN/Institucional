@@ -19,6 +19,10 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true
         },
+        body: {
+          type: Sequelize.STRING,
+          allowNull: true
+        },
         image_url: {
           type: Sequelize.STRING,
           allowNull: true

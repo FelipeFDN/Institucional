@@ -9,6 +9,7 @@ export const createNews = async (req, res) => {
             id: crypto.randomUUID(),
             tittle: req.body.tittle,
             description: req.body.description,
+            body: req.body.body,
             image_url: req.body.image_url,
             created_by: req.user.id
         })
