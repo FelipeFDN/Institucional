@@ -19,6 +19,9 @@ import newsRoutes from './routes/public/newsRoutes.js'
 import productRoutes from './routes/public/productRoutes.js'
 import productClassesRoutes from './routes/public/productClassesRoutes.js'
 import productClassesPrivateRoutes from './routes/private/productClassesRoutes.js'
+import HighlightsRouter from './routes/public/highlightsRoutes.js'
+import HighlightsPrivateRouter from './routes/private/highlightsRoutes.js'
+
 
 //Models
 import User from './models/User.js'
@@ -26,6 +29,7 @@ import Product from './models/Product.js'
 import News from './models/News.js'
 import NewsImage from './models/NewsImage.js'
 import ProductClasses from './models/ProductClasses.js'
+import Highlights from './models/Highlights.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -40,7 +44,6 @@ const allowedOrigins = process.env.FRONTEND_URL
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Permite chamadas sem origin (ex: Postman, curl, servidor para servidor)
       if (!origin) return callback(null, true)
       if (allowedOrigins.includes(origin)) return callback(null, true)
       callback(new Error(`CORS: origem não permitida → ${origin}`))
@@ -58,6 +61,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/produtos', productRoutes)
 app.use('/api/noticias', newsRoutes)
 app.use('/api/classes', productClassesRoutes)
+app.use('/api/destaques', HighlightsRouter)
 
 //middleware
 app.use(authToken)
@@ -68,15 +72,15 @@ app.use('/api/imagens', imagePrivateRoutes)
 app.use('/api/produtosP', productPrivateRoutes)
 app.use('/api/noticiasP', newsPrivateRoutes)
 app.use('/api/classesP', productClassesPrivateRoutes)
+app.use('/api/destaquesP', HighlightsPrivateRouter)
 
 const sequelize = new Sequelize(config)
-User.init(sequelize)
-Product.init(sequelize)
-News.init(sequelize)
-NewsImage.init(sequelize)
-ProductClasses.init(sequelize)
+const models = { User, Product, News, NewsImage, ProductClasses, Highlights }
 
-const models = { User, Product, News, NewsImage, ProductClasses }
+Object.values(models).forEach((model) => {
+    model.init(sequelize)
+})
+
 Object.values(models).forEach((model) => {
     if (model.associate) model.associate(models)
 })
