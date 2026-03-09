@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { ToastProvider } from './contexts/ToastContext'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 
 // Layouts
@@ -25,7 +26,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
+        <ToastProvider>
+          <Routes>
           {/* Rotas Públicas */}
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
@@ -53,6 +55,7 @@ export default function App() {
             <Route path="noticias" element={<AdminNews />} />
           </Route>
         </Routes>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   )

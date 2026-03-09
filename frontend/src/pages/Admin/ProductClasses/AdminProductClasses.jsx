@@ -4,12 +4,15 @@ import { productClassesService } from '../../../services/productClassesService'
 import { imageService } from '../../../services/imageService'
 import Loading from '../../../components/Loading/Loading'
 import Modal from '../../../components/Modal/Modal'
+import ImagePicker from '../../../components/ImagePicker/ImagePicker'
+import { useToast } from '../../../contexts/ToastContext'
 import styles from '../Admin.module.css'
 
-const emptyForm = { name: '', image: null }
+const emptyForm = { name: '', image: null, currentImageUrl: null }
 
 export default function AdminProductClasses() {
   const { data: classes, loading, error, refetch } = useFetch(productClassesService.getAll)
+  const toast = useToast()
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -33,7 +36,11 @@ export default function AdminProductClasses() {
 
   const openEdit = (item) => {
     setEditId(item.id)
-    setForm({ name: item.tittle, image: null })
+    setForm({
+      name: item.tittle,
+      image: null,
+      currentImageUrl: item.image_url ? `${apiUrl}${item.image_url}` : null,
+    })
     setMsg(null)
     setModalOpen(true)
   }
@@ -62,18 +69,19 @@ export default function AdminProductClasses() {
 
       const payload = { name: form.name }
       if (image_url) payload.image_url = image_url
+      if (!image_url && form.currentImageUrl === null && editId) payload.image_url = null
 
       if (editId) {
         await productClassesService.update(editId, payload)
-        setMsg('Classe atualizada com sucesso.')
+        toast('Classe atualizada com sucesso.')
       } else {
         await productClassesService.create(payload)
-        setMsg('Classe criada com sucesso.')
+        toast('Classe criada com sucesso.')
       }
-      setForm(emptyForm)
-      setEditId(null)
       refetch()
+      closeModal()
     } catch (err) {
+      toast(err.response?.data?.message || 'Erro ao salvar classe.', 'error')
       setMsg(err.response?.data?.message || 'Erro ao salvar classe.')
     } finally {
       setSubmitting(false)
@@ -85,9 +93,10 @@ export default function AdminProductClasses() {
     if (!confirm('Deseja deletar esta classe?')) return
     try {
       await productClassesService.delete(id)
+      toast('Classe deletada.')
       refetch()
     } catch {
-      alert('Erro ao deletar classe.')
+      toast('Erro ao deletar classe.', 'error')
     }
   }
 
@@ -138,9 +147,15 @@ export default function AdminProductClasses() {
         <form onSubmit={handleSubmit} className={styles.modalForm}>
           <div className={styles.fields}>
             <input name="name" value={form.name} onChange={handleChange} placeholder="Nome da classe" required />
-            <label className={styles.fieldLabel}>Imagem (opcional)</label>
-            <input type="file" name="image" accept="image/*" onChange={handleChange} />
           </div>
+
+          <ImagePicker
+            label="Imagem da classe (opcional)"
+            currentUrl={form.currentImageUrl}
+            file={form.image}
+            onChange={(f) => setForm((prev) => ({ ...prev, image: f }))}
+            onRemoveCurrent={() => setForm((prev) => ({ ...prev, currentImageUrl: null }))}
+          />
           {msg && <p className={styles.msg}>{msg}</p>}
           <div className={styles.formActions}>
             <button type="submit" className={styles.btnSave} disabled={submitting || uploading}>

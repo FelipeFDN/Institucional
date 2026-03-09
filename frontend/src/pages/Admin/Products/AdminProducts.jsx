@@ -5,13 +5,16 @@ import { productClassesService } from '../../../services/productClassesService'
 import { imageService } from '../../../services/imageService'
 import Loading from '../../../components/Loading/Loading'
 import Modal from '../../../components/Modal/Modal'
+import ImagePicker from '../../../components/ImagePicker/ImagePicker'
+import { useToast } from '../../../contexts/ToastContext'
 import styles from '../Admin.module.css'
 
-const emptyForm = { name: '', description: '', class: '', image: null }
+const emptyForm = { name: '', description: '', class: '', image: null, currentImageUrl: null }
 
 export default function AdminProducts() {
   const { data: products, loading, error, refetch } = useFetch(productService.getAll)
   const { data: classes } = useFetch(productClassesService.getAll)
+  const toast = useToast()
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -35,7 +38,13 @@ export default function AdminProducts() {
 
   const openEdit = (product) => {
     setEditId(product.id)
-    setForm({ name: product.name, description: product.description || '', class: product.class || '', image: null })
+    setForm({
+      name: product.name,
+      description: product.description || '',
+      class: product.class || '',
+      image: null,
+      currentImageUrl: product.image_url ? `${apiUrl}${product.image_url}` : null,
+    })
     setMsg(null)
     setModalOpen(true)
   }
@@ -68,18 +77,20 @@ export default function AdminProducts() {
         class: form.class || null,
       }
       if (image_url) payload.image_url = image_url
+      // Se o usuário removeu a imagem atual sem selecionar nova, limpa no backend
+      if (!image_url && form.currentImageUrl === null && editId) payload.image_url = null
 
       if (editId) {
         await productService.update(editId, payload)
-        setMsg('Produto atualizado com sucesso.')
+        toast('Produto atualizado com sucesso.')
       } else {
         await productService.create(payload)
-        setMsg('Produto criado com sucesso.')
+        toast('Produto criado com sucesso.')
       }
-      setForm(emptyForm)
-      setEditId(null)
       refetch()
+      closeModal()
     } catch (err) {
+      toast(err.response?.data?.message || 'Erro ao salvar produto.', 'error')
       setMsg(err.response?.data?.message || 'Erro ao salvar produto.')
     } finally {
       setSubmitting(false)
@@ -91,9 +102,10 @@ export default function AdminProducts() {
     if (!confirm('Deseja deletar este produto?')) return
     try {
       await productService.delete(id)
+      toast('Produto deletado.')
       refetch()
     } catch {
-      alert('Erro ao deletar produto.')
+      toast('Erro ao deletar produto.', 'error')
     }
   }
 
@@ -155,9 +167,15 @@ export default function AdminProducts() {
                 <option key={c.id} value={c.id}>{c.tittle}</option>
               ))}
             </select>
-            <label className={styles.fieldLabel}>Imagem</label>
-            <input type="file" name="image" accept="image/*" onChange={handleChange} />
           </div>
+
+          <ImagePicker
+            label="Imagem do produto"
+            currentUrl={form.currentImageUrl}
+            file={form.image}
+            onChange={(f) => setForm((prev) => ({ ...prev, image: f }))}
+            onRemoveCurrent={() => setForm((prev) => ({ ...prev, currentImageUrl: null }))}
+          />
           {msg && <p className={styles.msg}>{msg}</p>}
           <div className={styles.formActions}>
             <button type="submit" className={styles.btnSave} disabled={submitting || uploading}>

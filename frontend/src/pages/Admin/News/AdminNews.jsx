@@ -4,12 +4,15 @@ import { newsService } from '../../../services/newsService'
 import { imageService } from '../../../services/imageService'
 import Loading from '../../../components/Loading/Loading'
 import Modal from '../../../components/Modal/Modal'
+import ImagePicker from '../../../components/ImagePicker/ImagePicker'
+import { useToast } from '../../../contexts/ToastContext'
 import styles from '../Admin.module.css'
 
-const emptyForm = { tittle: '', description: '', body: '', image: null }
+const emptyForm = { tittle: '', description: '', body: '', image: null, currentImageUrl: null }
 
 export default function AdminNews() {
   const { data: news, loading, error, refetch } = useFetch(newsService.getAll)
+  const toast = useToast()
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [editImages, setEditImages] = useState([])
@@ -37,7 +40,13 @@ export default function AdminNews() {
 
   const openEdit = (item) => {
     setEditId(item.id)
-    setForm({ tittle: item.tittle, description: item.description || '', body: item.body || '', image: null })
+    setForm({
+      tittle: item.tittle,
+      description: item.description || '',
+      body: item.body || '',
+      image: null,
+      currentImageUrl: item.image_url ? `${apiUrl}${item.image_url}` : null,
+    })
     setEditImages([])
     setNewImages([])
     setMsg(null)
@@ -73,6 +82,7 @@ export default function AdminNews() {
 
       const payload = { tittle: form.tittle, description: form.description, body: form.body }
       if (image_url) payload.image_url = image_url
+      if (!image_url && form.currentImageUrl === null && editId) payload.image_url = null
 
       let savedId = editId
       if (editId) {
@@ -88,12 +98,11 @@ export default function AdminNews() {
         setUploading(false)
       }
 
-      setMsg(editId ? 'Notícia atualizada com sucesso.' : 'Notícia criada com sucesso.')
-      setForm(emptyForm)
-      setEditId(null)
-      setNewImages([])
       refetch()
+      toast(editId ? 'Notícia atualizada com sucesso.' : 'Notícia criada com sucesso.')
+      closeModal()
     } catch (err) {
+      toast(err.response?.data?.message || 'Erro ao salvar notícia.', 'error')
       setMsg(err.response?.data?.message || 'Erro ao salvar notícia.')
     } finally {
       setSubmitting(false)
@@ -106,8 +115,9 @@ export default function AdminNews() {
     try {
       await newsService.deleteImage(editId, imageId)
       setEditImages((imgs) => imgs.filter((i) => i.id !== imageId))
+      toast('Imagem removida.')
     } catch {
-      alert('Erro ao remover imagem.')
+      toast('Erro ao remover imagem.', 'error')
     }
   }
 
@@ -115,9 +125,10 @@ export default function AdminNews() {
     if (!confirm('Deseja deletar esta notícia?')) return
     try {
       await newsService.delete(id)
+      toast('Notícia deletada.')
       refetch()
     } catch {
-      alert('Erro ao deletar notícia.')
+      toast('Erro ao deletar notícia.', 'error')
     }
   }
 
@@ -162,36 +173,43 @@ export default function AdminNews() {
             <input name="tittle" value={form.tittle} onChange={handleChange} placeholder="Título" required />
             <textarea name="description" value={form.description} onChange={handleChange} placeholder="Descrição curta (subtítulo)" rows={3} />
             <textarea name="body" value={form.body} onChange={handleChange} placeholder="Texto completo da notícia" rows={8} />
-
-            <label className={styles.fieldLabel}>Banner (imagem principal)</label>
-            <input type="file" name="image" accept="image/*" onChange={handleChange} />
-
-            <label className={styles.fieldLabel}>Imagens adicionais</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(e) => setNewImages(Array.from(e.target.files))}
-            />
-            {newImages.length > 0 && (
-              <p className={styles.hint}>{newImages.length} imagem(ns) selecionada(s)</p>
-            )}
           </div>
 
-          {editId && editImages.length > 0 && (
-            <div className={styles.imageGrid}>
-              {editImages.map((img) => (
-                <div key={img.id} className={styles.imageThumbWrap}>
-                  <img src={`${apiUrl}${img.image_url}`} alt="" className={styles.imageThumb} />
-                  <button
-                    type="button"
-                    className={styles.removeImageBtn}
-                    onClick={() => handleDeleteImage(img.id)}
-                  >x</button>
+          <ImagePicker
+            label="Banner (imagem principal)"
+            currentUrl={form.currentImageUrl}
+            file={form.image}
+            onChange={(f) => setForm((prev) => ({ ...prev, image: f }))}
+            onRemoveCurrent={() => setForm((prev) => ({ ...prev, currentImageUrl: null }))}
+          />
+
+          {/* Imagens adicionais da galeria */}
+          <div style={{ marginTop: '1rem' }}>
+            {editImages.length > 0 && (
+              <>
+                <span className={styles.fieldLabel}>Galeria atual</span>
+                <div className={styles.imageGrid} style={{ marginTop: '0.4rem' }}>
+                  {editImages.map((img) => (
+                    <div key={img.id} className={styles.imageThumbWrap}>
+                      <img src={`${apiUrl}${img.image_url}`} alt="" className={styles.imageThumb} />
+                      <button
+                        type="button"
+                        className={styles.removeImageBtn}
+                        onClick={() => handleDeleteImage(img.id)}
+                      >✕</button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              </>
+            )}
+
+            <ImagePicker
+              label="Adicionar à galeria"
+              files={newImages}
+              onChange={(files) => setNewImages(files)}
+              multiple
+            />
+          </div>
 
           {msg && <p className={styles.msg}>{msg}</p>}
           <div className={styles.formActions}>
