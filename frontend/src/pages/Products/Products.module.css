@@ -11,12 +11,92 @@
 .title {
   font-size: 2rem;
   color: var(--primary);
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
+}
+
+/* Layout sidebar + conteúdo */
+.layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 1.25rem 1rem;
+  position: sticky;
+  top: 80px;
+}
+
+.sidebarTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.filterList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filterBtn {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: calc(var(--radius) / 2);
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), font-weight var(--transition);
+}
+
+.filterBtn:hover {
+  background: #eeeef4;
+}
+
+.filterBtn.active {
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Conteúdo principal */
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Seções */
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--highlight);
+  display: inline-block;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1.5rem;
 }
 
@@ -30,4 +110,34 @@
   text-align: center;
   color: var(--text-muted);
   padding: 2rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .filterList {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .filterBtn {
+    width: auto;
+    border: 2px solid var(--primary);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+  }
+
+  .filterBtn.active {
+    background: var(--primary);
+    color: var(--white);
+  }
 }

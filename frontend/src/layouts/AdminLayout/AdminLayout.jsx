@@ -25,6 +25,9 @@ export default function AdminLayout() {
           <NavLink to="/admin/produtos" className={({ isActive }) => isActive ? styles.active : ''}>
             📦 Produtos
           </NavLink>
+          <NavLink to="/admin/classes" className={({ isActive }) => isActive ? styles.active : ''}>
+            🏷️ Classes de Produtos
+          </NavLink>
           <NavLink to="/admin/noticias" className={({ isActive }) => isActive ? styles.active : ''}>
             📰 Notícias
           </NavLink>

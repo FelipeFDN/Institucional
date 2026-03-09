@@ -1,9 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { productClassesService } from '../../services/productClassesService'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [classes, setClasses] = useState([])
+
+  useEffect(() => {
+    productClassesService.getAll()
+      .then(({ data }) => setClasses(data))
+      .catch(() => {})
+  }, [])
 
   return (
     <nav className={styles.navbar}>
@@ -25,14 +33,39 @@ export default function Navbar() {
         {/* Links de navegação */}
         <ul className={`${styles.navLinks} ${menuOpen ? styles.open : ''}`}>
           <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/produtos" onClick={() => setMenuOpen(false)}>Produtos</Link></li>
+
+          {/* Dropdown Produtos */}
+          <li className={styles.dropdown}>
+            <Link to="/produtos" onClick={() => setMenuOpen(false)}>
+              Produtos <span className={styles.caret}>▾</span>
+            </Link>
+            {classes.length > 0 && (
+              <ul className={styles.dropdownMenu}>
+                <li>
+                  <Link to="/produtos" onClick={() => setMenuOpen(false)}>
+                    Todos os produtos
+                  </Link>
+                </li>
+                {classes.map((c) => (
+                  <li key={c.id}>
+                    <Link
+                      to={`/produtos?classe=${c.id}`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {c.tittle}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
           <li><Link to="/novidades" onClick={() => setMenuOpen(false)}>Novidades</Link></li>
           <li><Link to="/sobre" onClick={() => setMenuOpen(false)}>Sobre Nós</Link></li>
         </ul>
 
         {/* Ações à direita */}
         <div className={styles.actions}>
-          {/* Redes sociais */}
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={styles.socialIcon}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>

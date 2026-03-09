@@ -18,6 +18,7 @@ import Login from './pages/Login/Login'
 // Páginas admin
 import AdminUsers from './pages/Admin/Users/AdminUsers'
 import AdminProducts from './pages/Admin/Products/AdminProducts'
+import AdminProductClasses from './pages/Admin/ProductClasses/AdminProductClasses'
 import AdminNews from './pages/Admin/News/AdminNews'
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
             <Route index element={<Navigate to="/admin/produtos" replace />} />
             <Route path="usuarios" element={<AdminUsers />} />
             <Route path="produtos" element={<AdminProducts />} />
+            <Route path="classes" element={<AdminProductClasses />} />
             <Route path="noticias" element={<AdminNews />} />
           </Route>
         </Routes>

@@ -1,17 +1,15 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { useFetch } from '../../../hooks/useFetch'
-import { productService } from '../../../services/productService'
 import { productClassesService } from '../../../services/productClassesService'
 import { imageService } from '../../../services/imageService'
 import Loading from '../../../components/Loading/Loading'
 import Modal from '../../../components/Modal/Modal'
 import styles from '../Admin.module.css'
 
-const emptyForm = { name: '', description: '', class: '', image: null }
+const emptyForm = { name: '', image: null }
 
-export default function AdminProducts() {
-  const { data: products, loading, error, refetch } = useFetch(productService.getAll)
-  const { data: classes } = useFetch(productClassesService.getAll)
+export default function AdminProductClasses() {
+  const { data: classes, loading, error, refetch } = useFetch(productClassesService.getAll)
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -33,9 +31,9 @@ export default function AdminProducts() {
     setModalOpen(true)
   }
 
-  const openEdit = (product) => {
-    setEditId(product.id)
-    setForm({ name: product.name, description: product.description || '', class: product.class || '', image: null })
+  const openEdit = (item) => {
+    setEditId(item.id)
+    setForm({ name: item.tittle, image: null })
     setMsg(null)
     setModalOpen(true)
   }
@@ -62,25 +60,21 @@ export default function AdminProducts() {
         setUploading(false)
       }
 
-      const payload = {
-        name: form.name,
-        description: form.description,
-        class: form.class || null,
-      }
+      const payload = { name: form.name }
       if (image_url) payload.image_url = image_url
 
       if (editId) {
-        await productService.update(editId, payload)
-        setMsg('Produto atualizado com sucesso.')
+        await productClassesService.update(editId, payload)
+        setMsg('Classe atualizada com sucesso.')
       } else {
-        await productService.create(payload)
-        setMsg('Produto criado com sucesso.')
+        await productClassesService.create(payload)
+        setMsg('Classe criada com sucesso.')
       }
       setForm(emptyForm)
       setEditId(null)
       refetch()
     } catch (err) {
-      setMsg(err.response?.data?.message || 'Erro ao salvar produto.')
+      setMsg(err.response?.data?.message || 'Erro ao salvar classe.')
     } finally {
       setSubmitting(false)
       setUploading(false)
@@ -88,23 +82,20 @@ export default function AdminProducts() {
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Deseja deletar este produto?')) return
+    if (!confirm('Deseja deletar esta classe?')) return
     try {
-      await productService.delete(id)
+      await productClassesService.delete(id)
       refetch()
     } catch {
-      alert('Erro ao deletar produto.')
+      alert('Erro ao deletar classe.')
     }
   }
-
-  // Helper: nome da classe pelo id
-  const className = (id) => classes.find((c) => c.id === id)?.tittle || '—'
 
   return (
     <div>
       <div className={styles.pageHeader}>
-        <h1 className={styles.title}>Gerenciar Produtos</h1>
-        <button className={styles.btnNew} onClick={openCreate}>+ Novo Produto</button>
+        <h1 className={styles.title}>Classes de Produtos</h1>
+        <button className={styles.btnNew} onClick={openCreate}>+ Nova Classe</button>
       </div>
 
       {loading ? <Loading /> : error ? <p className={styles.error}>{error}</p> : (
@@ -113,29 +104,28 @@ export default function AdminProducts() {
             <tr>
               <th>Imagem</th>
               <th>Nome</th>
-              <th>Classe</th>
-              <th>Descrição</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((p) => (
-              <tr key={p.id}>
+            {classes.map((c) => (
+              <tr key={c.id}>
                 <td>
-                  {p.image_url
-                    ? <img src={`${apiUrl}${p.image_url}`} alt={p.name} className={styles.thumb} />
+                  {c.image_url
+                    ? <img src={`${apiUrl}${c.image_url}`} alt={c.tittle} className={styles.thumb} />
                     : '—'
                   }
                 </td>
-                <td>{p.name}</td>
-                <td>{p.classId?.tittle || '—'}</td>
-                <td>{p.description || '—'}</td>
+                <td>{c.tittle}</td>
                 <td className={styles.actions}>
-                  <button className={styles.btnEdit} onClick={() => openEdit(p)}>Editar</button>
-                  <button className={styles.btnDelete} onClick={() => handleDelete(p.id)}>Deletar</button>
+                  <button className={styles.btnEdit} onClick={() => openEdit(c)}>Editar</button>
+                  <button className={styles.btnDelete} onClick={() => handleDelete(c.id)}>Deletar</button>
                 </td>
               </tr>
             ))}
+            {classes.length === 0 && (
+              <tr><td colSpan={3} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Nenhuma classe cadastrada.</td></tr>
+            )}
           </tbody>
         </table>
       )}
@@ -143,19 +133,12 @@ export default function AdminProducts() {
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}
-        title={editId ? 'Editar Produto' : 'Novo Produto'}
+        title={editId ? 'Editar Classe' : 'Nova Classe'}
       >
         <form onSubmit={handleSubmit} className={styles.modalForm}>
           <div className={styles.fields}>
-            <input name="name" value={form.name} onChange={handleChange} placeholder="Nome" required />
-            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Descrição" rows={4} />
-            <select name="class" value={form.class} onChange={handleChange}>
-              <option value="">— Sem classe —</option>
-              {classes.map((c) => (
-                <option key={c.id} value={c.id}>{c.tittle}</option>
-              ))}
-            </select>
-            <label className={styles.fieldLabel}>Imagem</label>
+            <input name="name" value={form.name} onChange={handleChange} placeholder="Nome da classe" required />
+            <label className={styles.fieldLabel}>Imagem (opcional)</label>
             <input type="file" name="image" accept="image/*" onChange={handleChange} />
           </div>
           {msg && <p className={styles.msg}>{msg}</p>}
