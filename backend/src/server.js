@@ -17,6 +17,8 @@ import productPrivateRoutes from './routes/private/productRoutes.js'
 import newsPrivateRoutes from './routes/private/newsRoutes.js'
 import newsRoutes from './routes/public/newsRoutes.js'
 import productRoutes from './routes/public/productRoutes.js'
+import productClassesRoutes from './routes/public/productClassesRoutes.js'
+import productClassesPrivateRoutes from './routes/private/productClassesRoutes.js'
 
 //Models
 import User from './models/User.js'
@@ -55,6 +57,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 app.use('/api/auth', authRoutes)
 app.use('/api/produtos', productRoutes)
 app.use('/api/noticias', newsRoutes)
+app.use('/api/classes', productClassesRoutes)
 
 //middleware
 app.use(authToken)
@@ -64,6 +67,7 @@ app.use('/api/usuarios', userPrivateRoutes)
 app.use('/api/imagens', imagePrivateRoutes)
 app.use('/api/produtosP', productPrivateRoutes)
 app.use('/api/noticiasP', newsPrivateRoutes)
+app.use('/api/classesP', productClassesPrivateRoutes)
 
 const sequelize = new Sequelize(config)
 User.init(sequelize)
