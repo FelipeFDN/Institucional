@@ -7,7 +7,7 @@ export const login = async (req, res) => {
         const { email, password } = req.body
 
         const user = await await User.findOne({
-            where: {email: email}
+            where: {email: email, deleted: false}
         })
 
         if (user.length === 0) {
