@@ -12,7 +12,7 @@ class News extends Model {
                 allowNull: true
             },
             body: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
                 allowNull: true
             },
             image_url: {
