@@ -23,6 +23,14 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true
         },
+        class: {
+          type: Sequelize.UUID,
+          allowNull: true,
+          references: {
+            model: 'product_classes',
+            key: 'id'
+          }
+        },
         created_by: {
           type: Sequelize.UUID,
           allowNull: true,
