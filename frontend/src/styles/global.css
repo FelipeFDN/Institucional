@@ -21,6 +21,7 @@
   --radius: 8px;
   --shadow: 0 2px 12px rgba(0,0,0,0.1);
   --transition: 0.3s ease;
+  --textBody: #5a5a5a;
 }
 
 body {

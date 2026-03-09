@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom'
 import styles from './ProductCard.module.css'
 
 export default function ProductCard({ product }) {
   const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '')
 
   return (
-    <div className={styles.card}>
+    <Link to={`/produtos/${product.id}`} className={styles.card}>
       <div className={styles.imageWrapper}>
         {product.image_url ? (
           <img src={`${apiUrl}${product.image_url}`} alt={product.name} />
@@ -16,6 +17,6 @@ export default function ProductCard({ product }) {
         <h3>{product.name}</h3>
         <p>{product.description}</p>
       </div>
-    </div>
+    </Link>
   )
 }

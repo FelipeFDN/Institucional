@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './NewsCard.module.css'
 
 export default function NewsCard({ news }) {
@@ -15,7 +16,7 @@ export default function NewsCard({ news }) {
   }
 
   return (
-    <div className={styles.card}>
+    <Link to={`/novidades/${news.id}`} className={styles.card}>
       {news.image_url && (
         <img src={`${apiUrl}${news.image_url}`} alt={news.tittle} className={styles.image} />
       )}
@@ -24,6 +25,6 @@ export default function NewsCard({ news }) {
         <h3>{news.tittle}</h3>
         <p>{news.description}</p>
       </div>
-    </div>
+    </Link>
   )
 }

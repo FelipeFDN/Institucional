@@ -9,7 +9,9 @@ import AdminLayout from './layouts/AdminLayout/AdminLayout'
 // Páginas públicas
 import Home from './pages/Home/Home'
 import Products from './pages/Products/Products'
+import ProductDetail from './pages/Products/ProductDetail'
 import News from './pages/News/News'
+import NewsDetail from './pages/News/NewsDetail'
 import About from './pages/About/About'
 import Login from './pages/Login/Login'
 
@@ -27,7 +29,9 @@ export default function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/produtos" element={<Products />} />
+            <Route path="/produtos/:id" element={<ProductDetail />} />
             <Route path="/novidades" element={<News />} />
+            <Route path="/novidades/:id" element={<NewsDetail />} />
             <Route path="/sobre" element={<About />} />
             <Route path="/login" element={<Login />} />
           </Route>
