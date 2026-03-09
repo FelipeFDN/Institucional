@@ -23,6 +23,7 @@ import User from './models/User.js'
 import Product from './models/Product.js'
 import News from './models/News.js'
 import NewsImage from './models/NewsImage.js'
+import ProductClasses from './models/ProductClasses.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -69,6 +70,7 @@ User.init(sequelize)
 Product.init(sequelize)
 News.init(sequelize)
 NewsImage.init(sequelize)
+ProductClasses.init(sequelize)
 
 sequelize.authenticate().then(() => {
     app.listen(3000, () => {
