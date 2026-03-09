@@ -27,7 +27,7 @@ class Product extends Model {
     }
     static associate(models) {
         this.belongsTo(models.User, { foreignKey: 'created_by', as: 'creator' })
-        this.belongsTo(models.ProductClasses, { foreignKey: 'class', as: 'class' })        
+        this.belongsTo(models.ProductClasses, { foreignKey: 'class', as: 'classId' })        
     }
 }
 

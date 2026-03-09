@@ -28,7 +28,7 @@ class User extends Model {
         }, {sequelize})
     }
     static associate(models) {
-        this.belongsTo(models.User, { foreignKey: 'deleted_by', as: 'deleted' })
+        this.belongsTo(models.User, { foreignKey: 'deleted_by', as: 'deletedByUser' })
     }
 }
 

@@ -32,7 +32,11 @@ export const getAllNews = async (req, res) => {
 
 export const getNews = async (req, res) => {
     try{
-        const news = await News.findByPk(req.params.id)
+        const news = await News.findByPk(req.params.id, {
+            include: [{ model: NewsImage, as: 'images' }]
+        })
+
+        if (!news) return res.status(404).json({ message: "Notícia não encontrada." })
 
         res.status(200).json(news)
     }catch (err) {
@@ -95,12 +99,31 @@ export const addImages = async (req, res) => {
         const images = req.files.map(file => ({
             id: crypto.randomUUID(),
             news_id: news.id,
-            image_url: file.path
+            image_url: `/uploads/${file.filename}`
         }))
 
         await NewsImage.bulkCreate(images)
 
-        res.status(201).json({ message: "Imagens adicionadas com sucesso." })
+        res.status(201).json({ message: "Imagens adicionadas com sucesso.", images })
+    } catch (err) {
+        res.status(500).json({ message: "Erro no servidor, tente novamente." })
+    }
+}
+
+export const deleteNewsImage = async (req, res) => {
+    try {
+        const image = await NewsImage.findOne({
+            where: { id: req.params.imageId, news_id: req.params.id }
+        })
+
+        if (!image) return res.status(404).json({ message: "Imagem não encontrada." })
+
+        const filename = image.image_url.replace('/uploads/', '')
+        deleteImageFile(filename)
+
+        await image.destroy()
+
+        res.status(200).json({ message: "Imagem deletada com sucesso." })
     } catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente." })
     }

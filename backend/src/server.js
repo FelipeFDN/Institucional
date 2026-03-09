@@ -72,6 +72,11 @@ News.init(sequelize)
 NewsImage.init(sequelize)
 ProductClasses.init(sequelize)
 
+const models = { User, Product, News, NewsImage, ProductClasses }
+Object.values(models).forEach((model) => {
+    if (model.associate) model.associate(models)
+})
+
 sequelize.authenticate().then(() => {
     app.listen(3000, () => {
         console.log("App listenning.")
