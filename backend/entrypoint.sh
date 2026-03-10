@@ -7,4 +7,4 @@ until npx sequelize-cli db:migrate 2>&1; do
 done
 
 echo "Migrations executadas com sucesso!"
-exec npm run dev
+exec npm run start
