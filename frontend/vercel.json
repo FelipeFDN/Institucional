@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/uploads/:path*",
-      "destination": "https://institucional-backend.onrender.com/uploads/:path*"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
