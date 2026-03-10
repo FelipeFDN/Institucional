@@ -41,10 +41,17 @@ export const getProductClass = async (req, res) => {
 
 export const updateProductClass = async (req, res) => {
     try{
-        const class_ = await ProductClasses.update( 
-            req.body,
-            { where: {id: req.params.id} }
-        )
+        const existing = await ProductClasses.findByPk(req.params.id)
+        if (!existing) return res.status(404).json({ message: "Classe não encontrada." })
+
+        // Remove a imagem antiga quando substituída ou explicitamente removida (null)
+        const imageChanged = req.body.image_url !== undefined && req.body.image_url !== existing.image_url
+        if (imageChanged && existing.image_url) {
+            const oldFilename = existing.image_url.replace('/uploads/', '')
+            deleteImageFile(oldFilename)
+        }
+
+        await ProductClasses.update(req.body, { where: { id: req.params.id } })
 
         res.status(200).json({ message: "Produto atualizado com sucesso." })
     }catch (err) {

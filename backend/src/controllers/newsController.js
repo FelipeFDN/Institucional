@@ -46,10 +46,16 @@ export const getNews = async (req, res) => {
 
 export const updateNews = async (req, res) => {
     try{
-        const news = await News.update( 
-            req.body,
-            { where: {id: req.params.id} }
-        )
+        const existing = await News.findByPk(req.params.id)
+        if (!existing) return res.status(404).json({ message: "Notícia não encontrada." })
+
+        const imageChanged = req.body.image_url !== undefined && req.body.image_url !== existing.image_url
+        if (imageChanged && existing.image_url) {
+            const oldFilename = existing.image_url.replace('/uploads/', '')
+            deleteImageFile(oldFilename)
+        }
+
+        await News.update(req.body, { where: { id: req.params.id } })
 
         res.status(200).json({ message: "Notícia atualizada com sucesso." })
     }catch (err) {

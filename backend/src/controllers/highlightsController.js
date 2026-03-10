@@ -44,7 +44,16 @@ export const getAllHighlightsAdmin = async (req, res) => {
 
 export const updateHighlight = async (req, res) => {
     try{
-        await Highlights.update(req.body, { where: {id: req.params.id} })
+        const existing = await Highlights.findByPk(req.params.id)
+        if (!existing) return res.status(404).json({ message: "Destaque não encontrado." })
+
+        const imageChanged = req.body.image_url !== undefined && req.body.image_url !== existing.image_url
+        if (imageChanged && existing.image_url) {
+            const oldFilename = existing.image_url.replace('/uploads/', '')
+            deleteImageFile(oldFilename)
+        }
+
+        await Highlights.update(req.body, { where: { id: req.params.id } })
         res.status(200).json({ message: "Destaque atualizado com sucesso." })
     }catch (err) {
         res.status(500).json({ message: "Erro no servidor, tente novamente."})
