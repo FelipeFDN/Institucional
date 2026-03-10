@@ -21,6 +21,7 @@ import AdminUsers from './pages/Admin/Users/AdminUsers'
 import AdminProducts from './pages/Admin/Products/AdminProducts'
 import AdminProductClasses from './pages/Admin/ProductClasses/AdminProductClasses'
 import AdminNews from './pages/Admin/News/AdminNews'
+import AdminHighlights from './pages/Admin/Highlights/AdminHighlights'
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
             <Route path="produtos" element={<AdminProducts />} />
             <Route path="classes" element={<AdminProductClasses />} />
             <Route path="noticias" element={<AdminNews />} />
+            <Route path="destaques" element={<AdminHighlights />} />
           </Route>
         </Routes>
         </ToastProvider>

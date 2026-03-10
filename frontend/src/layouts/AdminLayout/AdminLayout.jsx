@@ -31,6 +31,9 @@ export default function AdminLayout() {
           <NavLink to="/admin/noticias" className={({ isActive }) => isActive ? styles.active : ''}>
             📰 Notícias
           </NavLink>
+          <NavLink to="/admin/destaques" className={({ isActive }) => isActive ? styles.active : ''}>
+            🌟 Destaques
+          </NavLink>
         </nav>
         <div className={styles.sidebarFooter}>
           <Link to="/" className={styles.backBtn}>
