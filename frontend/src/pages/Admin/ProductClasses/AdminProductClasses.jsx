@@ -6,6 +6,7 @@ import Loading from '../../../components/Loading/Loading'
 import Modal from '../../../components/Modal/Modal'
 import ImagePicker from '../../../components/ImagePicker/ImagePicker'
 import { useToast } from '../../../contexts/ToastContext'
+import { getApiUrl } from '../../../utils/apiUrl'
 import styles from '../Admin.module.css'
 
 const emptyForm = { name: '', image: null, currentImageUrl: null }
@@ -20,7 +21,7 @@ export default function AdminProductClasses() {
   const [uploading, setUploading] = useState(false)
   const [msg, setMsg] = useState(null)
 
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '')
+  const apiUrl = getApiUrl()
 
   const handleChange = (e) => {
     const { name, value, files } = e.target

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
+import { getApiUrl } from '../../utils/apiUrl'
 import styles from './ProductCard.module.css'
 
 export default function ProductCard({ product }) {
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '')
+  const apiUrl = getApiUrl()
 
   return (
     <Link to={`/produtos/${product.id}`} className={styles.card}>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getApiUrl } from '../../utils/apiUrl'
 import styles from './Carousel.module.css'
 
 /**
@@ -21,7 +22,7 @@ export default function Carousel({ items = [] }) {
   const prev = () => setOffset((o) => Math.max(0, o - STEP))
   const next = () => setOffset((o) => Math.min(items.length - STEP, o + STEP))
 
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || ''
+  const apiUrl = getApiUrl()
 
   // Slida o array visivel
   const visible = items.slice(offset, offset + STEP + 2) // renderiza alguns extras p/ transição suave

@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { productService } from '../../services/productService'
+import { getApiUrl } from '../../utils/apiUrl'
 import Loading from '../../components/Loading/Loading'
 import styles from './ProductDetail.module.css'
 
@@ -10,7 +11,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '')
+  const apiUrl = getApiUrl()
 
   useEffect(() => {
     productService.getById(id)

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
+import { getApiUrl } from '../../utils/apiUrl'
 import styles from './NewsCard.module.css'
 
 export default function NewsCard({ news }) {
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '')
+  const apiUrl = getApiUrl()
   let date = ''
   if (news.created_at) {
     const d = new Date(news.created_at)

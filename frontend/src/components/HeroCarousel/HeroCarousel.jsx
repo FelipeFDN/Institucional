@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { getApiUrl } from '../../utils/apiUrl'
 import styles from './HeroCarousel.module.css'
 
 export default function HeroCarousel({ slides = [] }) {
@@ -24,7 +25,7 @@ export default function HeroCarousel({ slides = [] }) {
   if (!slides.length) return null
 
   const slide = slides[current]
-  const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || ''
+  const apiUrl = getApiUrl()
 
   return (
     <div
