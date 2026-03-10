@@ -18,6 +18,7 @@ export default function Navbar() {
       <div className={styles.container}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
+          <img src="/logotipo.png" alt="Logotipo" className={styles.logoImg} />
           <span>Institucional</span>
         </Link>
 
